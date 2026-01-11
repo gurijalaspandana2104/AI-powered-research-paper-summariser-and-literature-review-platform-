@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Research Companion</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header">
+        <h1>📚 Your Research Companion</h1>
+        <p>Upload a paper. Get clarity, structure, and insight.</p>
+        <button id="themeToggle" class="theme-toggle">🌙</button>
+    </header>
+
+    <!-- Upload Form -->
+    <form method="POST" enctype="multipart/form-data" class="upload-card">
+
+        <label for="pdfInput" class="file-drop">
+            <span id="fileLabel">
+                📄 Drop your research paper here<br>
+                <small>or click to browse</small>
+            </span>
+        </label>
+
+        <input
+            type="file"
+            id="pdfInput"
+            name="pdf"
+            accept=".pdf"
+            required
+            style="display:none;"
+        >
+
+        <button type="submit" class="generate-btn">
+            🚀 Generate Review
+        </button>
+
+        <div class="spinner" id="progressText">
+            🔄 Starting analysis…
+        </div>
+    </form>
+
+    <!-- 🔹 PAPER STATS PANEL -->
+    {% if summary %}
+    <div class="result-card">
+        <p>
+            📄 <strong>{{ page_count }}</strong> pages •
+            📝 <strong>{{ word_count }}</strong> words •
+            🧠 AI summarized
+        </p>
+    </div>
+    {% endif %}
+
+    <!-- 🔹 MAIN RESULT -->
+    {% if summary %}
+    <section class="result-card">
+        <h2>🧠 AI-Generated Literature Review</h2>
+
+        <!-- Literature Review Sections -->
+        {% for section in summary.split("\n\n") %}
+        <div class="section-card">
+            <button class="section-header" onclick="toggleSection(this)">
+                📌 {{ section.split("\n")[0] }}
+            </button>
+            <div class="section-body">
+                {{ section }}
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- 👩‍🔬 CONTRIBUTORS SECTION -->
+        
+        
+
+        <!-- 🔹 KEYWORD VISUALIZATION -->
+        {% if keywords %}
+        <div class="keyword-list">
+            {% for k in keywords %}
+            <span class="keyword">🔑 {{ k }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <a href="/download" class="download-btn">📥 Download PDF</a>
+        <a href="/" class="reset-btn">🔄 Upload Another</a>
+    </section>
+    {% endif %}
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Built with ❤️ to support researchers</p>
+    </footer>
+
+</div>
+<!-- 💬 CHATBOT SECTION --> 
+  <!-- 💬 CHATBOT -->
+<div class="chat-widget">
+    <div class="chat-header" onclick="toggleChat()">
+        💬 Research Assistant
+    </div>
+
+    <div class="chat-body" id="chatBody">
+        <div id="chatBox" class="chat-box"></div>
+
+        <div class="chat-input-row">
+            <input id="chatInput" placeholder="Ask: What is UAV?" />
+            <button class="chat-send-btn" onclick="sendMessage()">Ask</button>
+        </div>
+
+        <button class="chat-clear-btn" onclick="clearChat()">🧹 Clear chat</button>
+    </div>
+</div>
+
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+<!-- File selection feedback -->
+<script>
+const fileInput = document.getElementById("pdfInput");
+const fileLabel = document.getElementById("fileLabel");
+
+if (fileInput) {
+    fileInput.addEventListener("change", () => {
+        if (fileInput.files.length > 0) {
+            fileLabel.innerHTML = `
+                ✅ <strong>${fileInput.files[0].name}</strong><br>
+                <small>PDF selected successfully</small>
+            `;
+        }
+    });
+}
+</script>
+
+</body>
+</html>

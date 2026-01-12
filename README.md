@@ -53,8 +53,7 @@ ReportLab for PDF summary generation
   
 PROJECT STRUCTURE
 
-
-project-root/
+ project-root/
 │
 ├── backend/
 │   ├── app.py
@@ -75,5 +74,3 @@ project-root/
 │   └── generated_summaries/
 │
 └── README.md
-
- 
